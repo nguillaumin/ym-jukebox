@@ -1,0 +1,25 @@
+sudo: required
+
+services:
+    - docker
+
+script:
+    - set -e
+    # Compile libym
+    - docker run --rm -v $PWD/stsound:/data -w /data trzeci/emscripten emmake make clean libym.js
+    # Build application
+    - docker run --rm -v $PWD:/data -w /data node npm install
+    - docker run --rm -v $PWD:/data -w /data node npm run scan-songs
+    - docker run --rm -v $PWD:/data -w /data node npm run build
+    # Remove files unnecessary on GitHub pages
+    - sudo chown -R $(id -u):$(id -g) .
+    - find . -maxdepth 1 -not -name . -not -name dist -not -name data -exec rm -Rf {} \;
+    # Move build output at the root for GitHub pages
+    - mv dist/* .
+    - rm -Rf dist
+
+
+deploy:
+    provider: pages
+    skip_cleanup: true
+    github_token: $GITHUB_TOKEN

@@ -1,0 +1,100 @@
+body, html {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  background-color: #080d11;
+  color: #c8c8c8;
+}
+
+.container {
+  display: flex;
+  flex-flow: column;
+}
+
+header, footer, main {
+  flex: 1;
+}
+
+header, footer {
+  background-color: #091304;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+}
+
+header {
+  border-bottom: solid 1px #101f06;
+}
+
+footer {
+  border-top: solid 1px #101f06;
+}
+
+a[href] {
+  color: #59af21;
+}
+
+a[href]:hover {
+  color: #79cf41;
+}
+
+a[href]:active {
+  color: #202f16;
+}
+
+h1 {
+  text-align: center;
+  font-size: large;
+}
+
+small,
+a.disabled,
+a.disabled:hover,
+a.disabled:active {
+  color: #aaa;
+}
+
+table {
+  width: 100%;
+  border-spacing: 0;
+}
+
+tr.active td:nth-child(1) {
+  border-left: solid 5px #59af21;
+  padding-left: .25rem;
+}
+
+tr:nth-child(odd) {
+  background-color: #091304;
+}
+
+tr:nth-child(even) {
+  background-color: #101f06;
+}
+
+td.actions, td.duration {
+  white-space: nowrap;
+  width: 1%;
+}
+
+td.duration {
+  text-align: right;
+}
+
+td.actions a {
+  visibility: hidden;
+}
+
+tr:hover {
+  background-color: #202f16;
+}
+
+tr:hover td.actions a {
+  visibility: visible;
+}
+
+td.actions a {
+  padding-left: .25rem;
+  padding-right: .25rem;
+}
+
+/* vim: set sts=2 sw=2 sts=2 : */
