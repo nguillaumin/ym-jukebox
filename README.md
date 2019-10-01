@@ -29,3 +29,12 @@ docker run --rm -v $PWD:/data -w /data trzeci/emscripten emmake make clean libym
 ```bash
 npm run scan-songs
 ```
+
+## Contributing
+
+Feel free to contribute with new features and improvements via pull requests.
+
+Another way to contribute is to help curate and organize the song library. There
+are issues such as invalid or missing metadata, as well as duplicate songs (that
+have different metadata, but are actually the same song). To assist in doing so,
+consider using the [YMTool](https://github.com/nguillaumin/ymtool) utility.
