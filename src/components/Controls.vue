@@ -103,6 +103,7 @@ export default {
 
 .controls .status {
   flex-grow: 1;
+  padding-bottom: .5rem;
 }
 .controls a i {
   vertical-align: middle;
