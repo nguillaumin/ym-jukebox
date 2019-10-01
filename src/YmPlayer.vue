@@ -208,6 +208,13 @@ body, html { height: 100%; }
   height: 100%;
 }
 
+@media (min-width: 1000px) {
+  .ym-player {
+    max-width: 50rem;
+    margin: auto;
+  }
+}
+
 .az-index {
   flex-grow: 0;
 }
