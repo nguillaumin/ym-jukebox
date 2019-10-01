@@ -6,7 +6,8 @@
         <a href="#" title="Play" @click.prevent="onClickPlaySong(song)"><i class="fa fa-play fa-2x" aria-hidden="true"></i></a>
         <div class="name">
           {{ song.name }} <small class="duration">{{ song.durationMs | duration }}</small><br>
-          <small class="author">{{ song.author }}</small>
+          <small class="author">{{ song.author }}</small><br>
+          <small class="path">{{ song.path | songPath }}</small>
         </div>
         <div class="actions">
           <a href="#" title="Remove from playlist" @click.prevent="onClickRemoveFromPlaylist(song)"><i class="fa fa-times fa-2x" aria-hidden="true"></i></a>
@@ -39,6 +40,9 @@ export default {
   filters: {
     duration (value) {
       return moment.utc(value).format('mm:ss')
+    },
+    songPath (value) {
+      return value.substring('data'.length)
     }
   },
   methods: {
@@ -88,4 +92,6 @@ export default {
 small.duration {
   padding-left: 1rem;
 }
+
+small.path { color: #777; }
 </style>
