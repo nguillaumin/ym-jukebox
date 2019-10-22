@@ -27,6 +27,15 @@
       @add-to-playlist="onAddToPlaylist"
       @play-song="onPlaySong" />
 
+    <ul class="actions nav-secondary" v-show="activeTab === 'playlist'">
+      <li>
+        <a href="#" @click.prevent="onClickEnqueueRandom"><i class="fa fa-plus-circle" aria-hidden="true"></i> Enqueue 100 random songs</a>
+      </li>
+      <li>
+        <a href="#" @click.prevent="onClickClearPlaylist"><i class="fa fa-times" aria-hidden="true"></i> Clear</a>
+      </li>
+    </ul>
+
     <Playlist
        v-show="activeTab === 'playlist'"
        :playlist="playlist"
@@ -37,6 +46,7 @@
     <div
       v-show="activeTab === 'about'"
       class="about">
+
       <p>
         <img src="../static/ym2149f-2x.png" alt="YM2149F">
       </p>
@@ -192,6 +202,17 @@ export default {
     },
     onClickAbout () {
       this.activeTab = 'about'
+    },
+    onClickEnqueueRandom () {
+      for (var i = 0; i < 100; i++) {
+        this.playlist.push(this.songs[Math.floor(Math.random() * this.songs.length - 1)])
+      }
+    },
+    onClickClearPlaylist () {
+      this.playlist = []
+      this.playlistIndex = 0
+      libymWrapper.pause()
+      this.playing = false
     }
   }
 }
@@ -215,7 +236,7 @@ body, html { height: 100%; }
   }
 }
 
-.az-index {
+.az-index, .actions {
   flex-grow: 0;
 }
 
@@ -229,6 +250,7 @@ nav ul {
   list-style: none;
   padding-left: 0;
   margin-top: 0;
+  margin-bottom: 0;
 }
 
 nav ul li {
@@ -255,8 +277,38 @@ nav li {
 
 .about p {
   text-align: center;
-  padding-top: 1rem;
+  padding-top: 2rem;
   padding-bottom: 1rem;
+  margin: 0 .5rem;
+}
+
+ul.nav-secondary {
+  background-color: #101f06;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.actions {
+  text-align: center;
+  list-style-type: none;
+  padding: 0;
+  margin-top: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.actions li {
+  display: inline;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.actions li a {
+  display: inline-block;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
 }
 
 </style>

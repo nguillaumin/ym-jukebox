@@ -1,5 +1,5 @@
 <template>
-  <ul class="az-index">
+  <ul class="az-index nav-secondary">
     <li v-for="(count, l) in azIndex"><a v-if="count" href="#" @click.prevent="onClickSelectLetter(l)" :class="{active: letter == l}">{{l}}</a><span v-else>{{l}}</span></li>
   </ul>
 </template>
@@ -46,9 +46,9 @@ export default {
 
 <style scoped>
 ul {
-  padding: 0;
-  margin: 0;
   text-align: center;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 ul li {
