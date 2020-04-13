@@ -62,59 +62,59 @@ function playSong (song) {
   axios.get(song.path.replace(/#/, '%23'), {
     responseType: 'arraybuffer'
   })
-  .then(response => {
-    // Cleanup previous state. May happen if a new
-    // song starts playing while a song is currently playing
-    cleanup(state)
+    .then(response => {
+      // Cleanup previous state. May happen if a new
+      // song starts playing while a song is currently playing
+      cleanup(state)
 
-    state.ym = libym.ccall('ymMusicCreate', 'number')
+      state.ym = libym.ccall('ymMusicCreate', 'number')
 
-    var musicData = new Uint8Array(response.data)
-    state.musicDataPtr = libym._malloc(musicData.byteLength)
+      var musicData = new Uint8Array(response.data)
+      state.musicDataPtr = libym._malloc(musicData.byteLength)
 
-    libym.HEAPU8.set(musicData, state.musicDataPtr)
+      libym.HEAPU8.set(musicData, state.musicDataPtr)
 
-    if (libym.ccall('ymMusicLoadMemory',
-      'number',
-      ['number', 'number', 'number'],
-      [state.ym, state.musicDataPtr, musicData.byteLength]) === 0) {
-
-      console.error('Error loading music from memory', getLibYmLastError(state.ym))
-      return
-
-    }
-
-    var samplesData = new Int16Array(scriptNode.bufferSize)
-    state.samplesDataPtr = libym._malloc(samplesData.byteLength)
-
-    scriptNode.onaudioprocess = (e) => {
-      if (state.paused) {
-        return
-      }
-
-      if (libym.ccall('ymMusicCompute',
+      if (libym.ccall('ymMusicLoadMemory',
         'number',
         ['number', 'number', 'number'],
-        [state.ym, state.samplesDataPtr, samplesData.length]) === 0) {
+        [state.ym, state.musicDataPtr, musicData.byteLength]) === 0) {
 
-        // Most likely the tune ended
-        cleanup(state)
-
-        onSongEnded()
+        console.error('Error loading music from memory', getLibYmLastError(state.ym))
         return
+
       }
 
-      var result = new Int16Array(libym.HEAP16.buffer, state.samplesDataPtr, samplesData.length)
-      var outputData = e.outputBuffer.getChannelData(0)
+      var samplesData = new Int16Array(scriptNode.bufferSize)
+      state.samplesDataPtr = libym._malloc(samplesData.byteLength)
 
-      for (var i = 0; i < samplesData.length; i++) {
-        outputData[i] = result[i] / (result[i] >= 0 ? 32767 : 32768)
+      scriptNode.onaudioprocess = (e) => {
+        if (state.paused) {
+          return
+        }
+
+        if (libym.ccall('ymMusicCompute',
+          'number',
+          ['number', 'number', 'number'],
+          [state.ym, state.samplesDataPtr, samplesData.length]) === 0) {
+
+          // Most likely the tune ended
+          cleanup(state)
+
+          onSongEnded()
+          return
+        }
+
+        var result = new Int16Array(libym.HEAP16.buffer, state.samplesDataPtr, samplesData.length)
+        var outputData = e.outputBuffer.getChannelData(0)
+
+        for (var i = 0; i < samplesData.length; i++) {
+          outputData[i] = result[i] / (result[i] >= 0 ? 32767 : 32768)
+        }
       }
-    }
 
-    scriptNode.connect(audioCtx.destination)
+      scriptNode.connect(audioCtx.destination)
 
-  })
+    })
 }
 
 function pause () {
