@@ -59,7 +59,7 @@ function playSong (song) {
     scriptNode = audioCtx.createScriptProcessor(8192, 0, 1)
   }
 
-  axios.get(song.path, {
+  axios.get(song.path.replace(/#/, '%23'), {
     responseType: 'arraybuffer'
   })
   .then(response => {
