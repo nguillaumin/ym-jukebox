@@ -12,7 +12,7 @@
     "scan-songs": "node scripts/scan-songs.js data"
   },
   "dependencies": {
-    "axios": "^0.17.1",
+    "axios": "^0.18.1",
     "font-awesome": "^4.7.0",
     "jquery": "^3.4.1",
     "moment": "^2.24.0",
