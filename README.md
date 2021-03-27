@@ -7,27 +7,39 @@ Music is from the defunct [BrainBug ST-Sound archive](http://www.brainbug.ch/sts
 
 ## Build Setup
 
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-```
-
-## Building the ST-Sound library Emscripten port
+Install dependencies:
 
 ```bash
-docker run --rm -v $PWD:/data -w /data trzeci/emscripten emmake make clean libym.js
+npm install
 ```
 
-## Generating the songs JSON index file
+### Building the ST-Sound library Emscripten port
+
+```bash
+docker run --rm -v $PWD/stsound:/data -w /data emscripten/emsdk:1.39.15 emmake make clean libym.js
+```
+
+### Generating the songs JSON index file
 
 ```bash
 npm run scan-songs
+```
+
+### Running in development mode
+
+⚠️ In development mode you must manually copy `stsound/libym.wasm` to the
+root of the project.
+
+```bash
+npm run dev
+```
+
+This will serve the app at http://0.0.0.0:8080/ with hot reload.
+
+### Building the production version
+
+```
+npm run build
 ```
 
 ## Contributing

@@ -6,7 +6,7 @@ services:
 script:
     - set -e
     # Compile libym
-    - docker run --rm -v $PWD/stsound:/data -w /data trzeci/emscripten emmake make clean libym.js
+    - docker run --rm -v $PWD/stsound:/data -w /data emscripten/emsdk:1.39.15 emmake make clean libym.js
     # Build application
     - docker run --rm -v $PWD:/data -w /data node npm install
     - docker run --rm -v $PWD:/data -w /data node npm run scan-songs
