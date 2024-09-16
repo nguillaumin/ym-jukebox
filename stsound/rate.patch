@@ -1,0 +1,25 @@
+diff -ruN StSound-1.43/StSoundLibrary/StSoundLibrary.h StSound-1.43-patched/StSoundLibrary/StSoundLibrary.h
+--- StSound-1.43/StSoundLibrary/StSoundLibrary.h	2024-09-16 21:43:28.070690604 +0200
++++ StSound-1.43-patched/StSoundLibrary/StSoundLibrary.h	2024-09-16 21:40:21.921707500 +0200
+@@ -60,6 +60,7 @@
+ 
+ // Create object
+ extern	YMMUSIC *		ymMusicCreate();
++extern	YMMUSIC *		ymMusicCreateWithRate(ymint rate);
+ 
+ // Release object
+ extern	void			ymMusicDestroy(YMMUSIC *pMusic);
+diff -ruN StSound-1.43/StSoundLibrary/YmUserInterface.cpp StSound-1.43-patched/StSoundLibrary/YmUserInterface.cpp
+--- StSound-1.43/StSoundLibrary/YmUserInterface.cpp	2024-09-16 21:43:28.070690604 +0200
++++ StSound-1.43-patched/StSoundLibrary/YmUserInterface.cpp	2024-09-16 21:40:17.124988996 +0200
+@@ -46,6 +46,10 @@
+ 	return (YMMUSIC*)(new CYmMusic);
+ }
+ 
++YMMUSIC * ymMusicCreateWithRate(ymint rate)
++{
++	return (YMMUSIC*)(new CYmMusic(rate));
++}
+ 
+ ymbool ymMusicLoad(YMMUSIC *pMus, const char *fName)
+ {

@@ -1,31 +1,66 @@
+<script setup>
+const props = defineProps({
+  song: {
+    type: Object,
+    default: null
+  },
+  playing: {
+    type: Boolean,
+    default: false
+  },
+  hasPrevious: {
+    type: Boolean,
+    default: false
+  },
+  hasNext: {
+    type: Boolean,
+    default: false
+  }
+})
+
+const emit = defineEmits(['next', 'previous', 'play', 'pause'])
+
+function onClickPlayPause() {
+  if (props.playing === true) {
+    emit('pause')
+  } else {
+    emit('play')
+  }
+}
+</script>
+
 <template>
   <div class="controls">
-
     <div>
       <ul class="buttons">
         <li>
-          <a href="#"
+          <a
+            href="#"
             title="Previous"
-            @click.prevent="onClickPrevious"
-            :class="{disabled: !hasPrevious}">
+            @click.prevent="$emit('previous')"
+            :class="{ disabled: !hasPrevious }"
+          >
             <i class="fa fa-fw fa-2x fa-step-backward" aria-hidden="true"></i>
           </a>
         </li>
 
         <li>
-          <a href="#"
+          <a
+            href="#"
             title="Play / Pause"
             @click.prevent="onClickPlayPause"
-            :class="{disabled: !song}">
-            <i class="fa fa-fw fa-4x" :class="{'fa-play': !playing, 'fa-pause': playing}" aria-hidden="true"></i>
+            :class="{ disabled: !song }"
+          >
+            <i
+              class="fa fa-fw fa-4x"
+              :class="{ 'fa-play': !playing, 'fa-pause': playing }"
+              aria-hidden="true"
+            ></i>
           </a>
         </li>
 
         <li>
-          <a href="#"
-            title="Next"
-            @click.prevent="onClickNext"
-            :class="{disabled: !hasNext}">
+          <a href="#" title="Next" @click.prevent="$emit('next')" :class="{ disabled: !hasNext }">
             <i class="fa fa-fw fa-2x fa-step-forward" aria-hidden="true"></i>
           </a>
         </li>
@@ -41,48 +76,8 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
-
-<script>
-export default {
-  name: 'Controls',
-  props: {
-    song: {
-      type: Object,
-      default: null
-    },
-    playing: {
-      type: Boolean,
-      default: false
-    },
-    hasPrevious: {
-      type: Boolean,
-      default: false
-    },
-    hasNext: {
-      type: Boolean,
-      default: false
-    }
-  },
-  methods: {
-    onClickPrevious () {
-      this.$emit('previous')
-    },
-    onClickNext () {
-      this.$emit('next')
-    },
-    onClickPlayPause () {
-      if (this.playing === true) {
-        this.$emit('pause')
-      } else {
-        this.$emit('play')
-      }
-    }
-  }
-}
-</script>
 
 <style scoped>
 .controls {
@@ -92,7 +87,7 @@ export default {
   border-top: solid 1px #59af21;
 }
 
-.controls>div {
+.controls > div {
   display: flex;
   align-items: center;
 }
@@ -103,7 +98,7 @@ export default {
 
 .controls .status {
   flex-grow: 1;
-  padding-bottom: .5rem;
+  padding-bottom: 0.5rem;
 }
 .controls a i {
   vertical-align: middle;
@@ -114,7 +109,7 @@ export default {
 }
 
 h2 {
-  margin: .5rem;
+  margin: 0.5rem;
 }
 
 img {

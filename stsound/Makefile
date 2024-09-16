@@ -7,7 +7,7 @@ LIB = digidrum.o Ymload.o Ym2149Ex.o YmMusic.o YmUserInterface.o
 CFLAGS = -Wall
 
 libym.js: libym.a
-	$(CC) -o libym.js libym.a -L. -llzh -s EXPORTED_FUNCTIONS='["_ymMusicCreate", "_ymMusicDestroy", "_ymMusicLoad", "_ymMusicLoadMemory", "_ymMusicGetInfo", "_ymMusicPlay", "_ymMusicCompute", "_ymMusicStop", "_ymMusicGetLastError"]' -s MODULARIZE=1 -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "getValue"]'
+	$(CC) -o libym.js libym.a -L. -llzh -s EXPORTED_FUNCTIONS='["_ymMusicCreate", "_ymMusicCreateWithRate", "_ymMusicDestroy", "_ymMusicLoad", "_ymMusicLoadMemory", "_ymMusicGetInfo", "_ymMusicPlay", "_ymMusicCompute", "_ymMusicStop", "_ymMusicGetLastError", "_malloc", "_free"]' -s EXPORT_ES6=1 -s EXPORTED_RUNTIME_METHODS=ccall,getValue
 
 libym.a: $(LIB)
 	$(AR) cr libym.a $(LIB)
@@ -32,6 +32,9 @@ liblzh.a: lzhlib.o
 
 lzhlib.o: $(STSOUND_SRC)/LZH/LzhLib.cpp $(STSOUND_SRC)/LZH/LZH.H
 	$(CC) -c $(STSOUND_SRC)/LZH/LzhLib.cpp
+
+patch:
+	patch -p0 < rate.patch
 
 clean:
 	$(RM) *~ *.o *.a *.js

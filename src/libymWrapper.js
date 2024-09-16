@@ -1,7 +1,7 @@
 import axios from 'axios'
-import libymModule from '../stsound/libym'
+import libymModule from '../stsound/libym.js'
 
-const libym = libymModule()
+const libym = await libymModule()
 
 // Chrome requires a user interaction to create an audio context, so
 // only create it when we play a song
@@ -17,7 +17,7 @@ var state = {
 
 var onSongEnded = () => {}
 
-function cleanup (state) {
+function cleanup(state) {
   state.paused = false
 
   if (state.musicDataPtr > 0) {
@@ -31,57 +31,55 @@ function cleanup (state) {
   }
 
   if (state.ym > 0) {
-    libym.ccall('ymMusicDestroy',
-      'number',
-      ['number'],
-      [state.ym])
+    libym.ccall('ymMusicDestroy', 'number', ['number'], [state.ym])
 
     state.ym = 0
   }
 
-  scriptNode.onaudioprocess = (e) => {}
+  scriptNode.onaudioprocess = () => {}
   try {
     scriptNode.disconnect(audioCtx.destination)
   } catch (e) {
+    // Ignored
   }
 }
 
-function getLibYmLastError (ym) {
-  return libym.ccall('ymMusicGetLastError',
-    'string',
-    ['number'],
-    [ym])
+function getLibYmLastError(ym) {
+  return libym.ccall('ymMusicGetLastError', 'string', ['number'], [ym])
 }
 
-function playSong (song) {
+function playSong(song) {
   if (!audioCtx) {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)()
     scriptNode = audioCtx.createScriptProcessor(8192, 0, 1)
   }
 
-  axios.get(song.path.replace(/#/, '%23'), {
-    responseType: 'arraybuffer'
-  })
-    .then(response => {
+  axios
+    .get(song.path.replace(/#/, '%23'), {
+      responseType: 'arraybuffer'
+    })
+    .then((response) => {
       // Cleanup previous state. May happen if a new
       // song starts playing while a song is currently playing
       cleanup(state)
 
-      state.ym = libym.ccall('ymMusicCreate', 'number')
+      state.ym = libym.ccall('ymMusicCreateWithRate', 'number', ['number'], [audioCtx.sampleRate])
 
       var musicData = new Uint8Array(response.data)
       state.musicDataPtr = libym._malloc(musicData.byteLength)
 
       libym.HEAPU8.set(musicData, state.musicDataPtr)
 
-      if (libym.ccall('ymMusicLoadMemory',
-        'number',
-        ['number', 'number', 'number'],
-        [state.ym, state.musicDataPtr, musicData.byteLength]) === 0) {
-
+      if (
+        libym.ccall(
+          'ymMusicLoadMemory',
+          'number',
+          ['number', 'number', 'number'],
+          [state.ym, state.musicDataPtr, musicData.byteLength]
+        ) === 0
+      ) {
         console.error('Error loading music from memory', getLibYmLastError(state.ym))
         return
-
       }
 
       var samplesData = new Int16Array(scriptNode.bufferSize)
@@ -92,11 +90,14 @@ function playSong (song) {
           return
         }
 
-        if (libym.ccall('ymMusicCompute',
-          'number',
-          ['number', 'number', 'number'],
-          [state.ym, state.samplesDataPtr, samplesData.length]) === 0) {
-
+        if (
+          libym.ccall(
+            'ymMusicCompute',
+            'number',
+            ['number', 'number', 'number'],
+            [state.ym, state.samplesDataPtr, samplesData.length]
+          ) === 0
+        ) {
           // Most likely the tune ended
           cleanup(state)
 
@@ -113,16 +114,15 @@ function playSong (song) {
       }
 
       scriptNode.connect(audioCtx.destination)
-
     })
 }
 
-function pause () {
+function pause() {
   state.paused = true
   scriptNode.disconnect(audioCtx.destination)
 }
 
-function unpause () {
+function unpause() {
   state.paused = false
   scriptNode.connect(audioCtx.destination)
 }
@@ -131,9 +131,7 @@ export default {
   playSong: playSong,
   pause: pause,
   unpause: unpause,
-  setOnSongEnded (callback) {
+  setOnSongEnded(callback) {
     onSongEnded = callback
   }
 }
-
-// vim: set sts=2 sw=2 sts=2 :

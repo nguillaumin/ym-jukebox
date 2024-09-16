@@ -16,7 +16,7 @@ npm install
 ### Building the ST-Sound library Emscripten port
 
 ```bash
-docker run --rm -v $PWD/stsound:/data -w /data emscripten/emsdk:1.39.15 emmake make clean libym.js
+docker run --rm -v $PWD/stsound:/data -w /data emscripten/emsdk:3.1.66 emmake make clean libym.js
 ```
 
 ### Generating the songs JSON index file
@@ -27,14 +27,11 @@ npm run scan-songs
 
 ### Running in development mode
 
-⚠️ In development mode you must manually copy `stsound/libym.wasm` to the
-root of the project.
-
 ```bash
 npm run dev
 ```
 
-This will serve the app at http://0.0.0.0:8080/ with hot reload.
+This will serve the app at http://localhost:5173/ with hot reload.
 
 ### Building the production version
 
