@@ -1,0 +1,81 @@
+name: Build and Deploy
+
+on: [push]
+
+jobs:
+  libym:
+    runs-on: ubuntu-latest
+    container:
+      image: emscripten/emsdk:3.1.66
+      # volumes:
+      # - ${{ github.workspace }}:/github/workspace
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - run: cd stsound && emmake make clean libym.js
+    - name: Upload libym artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: libym
+        path: |
+          stsound/libym.js
+          stsound/libym.wasm
+
+  build:
+    needs: libym
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js 22.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22.x
+        cache: 'npm'
+    - name: Download libym artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: libym
+        path: stsound
+    - run: npm ci
+    # - run: npm lint
+    - run: npm run scan-songs
+    - run: npm run build
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: build
+        path: dist/
+
+  prepare-deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        sparse-checkout: data
+        sparse-checkout-cone-mode: false
+    - name: Download build artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: build
+        path: .
+    - name: Upload deploy artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: .
+
+  deploy:
+    needs: prepare-deploy
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+    - uses: actions/deploy-pages@v4
