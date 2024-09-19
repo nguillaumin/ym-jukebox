@@ -40,7 +40,7 @@ function onClickPlayPause() {
             @click.prevent="$emit('previous')"
             :class="{ disabled: !hasPrevious }"
           >
-            <i class="fa fa-fw fa-2x fa-step-backward" aria-hidden="true"></i>
+            <font-awesome-icon icon="fa-solid fa-step-backward" size="2x" fixed-width />
           </a>
         </li>
 
@@ -51,17 +51,17 @@ function onClickPlayPause() {
             @click.prevent="onClickPlayPause"
             :class="{ disabled: !song }"
           >
-            <i
-              class="fa fa-fw fa-4x"
-              :class="{ 'fa-play': !playing, 'fa-pause': playing }"
-              aria-hidden="true"
-            ></i>
+            <font-awesome-icon
+              :icon="playing ? 'fa-solid fa-pause' : 'fa-solid fa-play'"
+              size="4x"
+              fixed-width
+            />
           </a>
         </li>
 
         <li>
           <a href="#" title="Next" @click.prevent="$emit('next')" :class="{ disabled: !hasNext }">
-            <i class="fa fa-fw fa-2x fa-step-forward" aria-hidden="true"></i>
+            <font-awesome-icon icon="fa-solid fa-step-forward" size="2x" fixed-width />
           </a>
         </li>
       </ul>
@@ -100,7 +100,7 @@ function onClickPlayPause() {
   flex-grow: 1;
   padding-bottom: 0.5rem;
 }
-.controls a i {
+.controls a svg {
   vertical-align: middle;
 }
 

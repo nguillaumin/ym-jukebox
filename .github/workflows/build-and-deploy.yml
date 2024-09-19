@@ -37,7 +37,7 @@ jobs:
         name: libym
         path: stsound
     - run: npm ci
-    # - run: npm lint
+    - run: npm run lint
     - run: npm run scan-songs
     - run: npm run build
     - name: Upload build artifact

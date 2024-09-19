@@ -24,8 +24,8 @@ function songPath(path) {
         :class="{ active: index === playlistIndex }"
       >
         <a href="#" title="Play" @click.prevent="$emit('play-song', song)"
-          ><i class="fa fa-play fa-2x" aria-hidden="true"></i
-        ></a>
+          ><font-awesome-icon icon="fa-solid fa-play" size="3x"
+        /></a>
         <div class="name">
           {{ song.name }} <small class="duration">{{ songDuration(song.durationMs) }}</small
           ><br />
@@ -38,8 +38,8 @@ function songPath(path) {
             href="#"
             title="Remove from playlist"
             @click.prevent="$emit('remove-from-playlist', song)"
-            ><i class="fa fa-times fa-2x" aria-hidden="true"></i
-          ></a>
+            ><font-awesome-icon icon="fa-solid fa-times" size="2x"
+          /></a>
         </div>
       </div>
     </div>

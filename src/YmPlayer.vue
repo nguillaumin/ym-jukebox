@@ -165,12 +165,12 @@ function playSong() {
     <ul class="actions nav-secondary" v-show="activeTab === 'playlist'">
       <li>
         <a href="#" @click.prevent="onClickEnqueueRandom"
-          ><i class="fa fa-plus-circle" aria-hidden="true"></i> Enqueue 100 random songs</a
+          ><font-awesome-icon icon="fa-solid fa-plus-circle" /> Enqueue 100 random songs</a
         >
       </li>
       <li>
         <a href="#" @click.prevent="onClickClearPlaylist"
-          ><i class="fa fa-times" aria-hidden="true"></i> Clear</a
+          ><font-awesome-icon icon="fa-solid fa-times" /> Clear</a
         >
       </li>
     </ul>
@@ -193,7 +193,7 @@ function playSong() {
         <a href="http://leonard.oxg.free.fr/">ST-Sound library by Leonard</a>. Music is from the
         defunct <a href="http://www.brainbug.ch/stsound/">BrainBug ST-Sound archive</a> and
         <a href="http://modland.com/">Modland</a>. Sources and music files on
-        <i class="fa fa-github" aria-hidden="true"></i>
+        <font-awesome-icon icon="fa-brands fa-github" />&nbsp;
         <a href="https://github.com/nguillaumin/ym-jukebox">GitHub</a>.
       </p>
     </div>

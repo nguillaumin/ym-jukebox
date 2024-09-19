@@ -11,5 +11,8 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest'
   },
-  ignorePatterns: ['**/stsound/**']
+  ignorePatterns: ['**/stsound/**'],
+  globals: {
+    'process': true
+  }
 }
