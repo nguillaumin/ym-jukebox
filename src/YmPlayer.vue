@@ -221,7 +221,7 @@ html {
   font-family: 'Exo 2', sans-serif;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100dvh;
 }
 
 @media (min-width: 1000px) {
