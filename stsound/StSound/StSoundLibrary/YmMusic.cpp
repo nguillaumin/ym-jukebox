@@ -47,9 +47,9 @@ static	const ymint	mfpPrediv[8] = {0,4,10,16,50,64,100,200};
 
 
 
-CYmMusic::CYmMusic(ymint _replayRate)
+CYmMusic::CYmMusic(ymint _replayRate) :
+    ymChip(ATARI_CLOCK, 1, _replayRate)
 {
-
 	pBigMalloc = NULL;
 	pSongName = NULL;
 	pSongAuthor = NULL;
@@ -59,7 +59,7 @@ CYmMusic::CYmMusic(ymint _replayRate)
 
 	pBigSampleBuffer = NULL;
 	pMixBlock = NULL;
-	
+
 	replayRate = _replayRate;
 	innerSamplePos = 0;
 	currentPos = 0;
@@ -221,12 +221,12 @@ ymbool	CYmMusic::isSeekable(void)
 		return getAttrib()&A_TIMECONTROL;
 }
 
-void	CYmMusic::setLastError(char *pError)
+void	CYmMusic::setLastError(const char *pError)
 {
 		pLastError = pError;
 }
 
-char	*CYmMusic::getLastError(void)
+const char	*CYmMusic::getLastError(void)
 {
 		return pLastError;
 }
@@ -420,7 +420,7 @@ void	CYmMusic::player(void)
 
 			if (ptr[12])
 			{
-				sampleFrq = (MFP_CLOCK / ptr[12]);
+				sampleFrq = ((MFP_CLOCK/4) / ptr[12]);
 				ymChip.drumStart(	2,							// Voice C
 									sampleAdress[sampleNum],
 									sampleLen[sampleNum],

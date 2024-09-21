@@ -2,7 +2,7 @@
 
 	ST-Sound ( YM files player library )
 
-	Manage YM file depacking and parsing
+	Main header to use the StSound "C" like API in your production.
 
 -----------------------------------------------------------------------------*/
 
@@ -34,32 +34,64 @@
 *
 -----------------------------------------------------------------------------*/
 
-#ifndef __YMLOAD__
-#define	__YMLOAD__
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#ifndef __STSOUNDLIBRARY__
+#define __STSOUNDLIBRARY__
 
+#include "YmTypes.h"
 
-#pragma pack(1)
+typedef	void			YMMUSIC;
+
 typedef struct
 {
-	ymu8	size;
-	ymu8	sum;
-	char	id[5];
-	ymu32	packed;
-	ymu32	original;
-	ymu8	reserved[5];
-	ymu8	level;
-	ymu8	name_lenght;
-} lzhHeader_t;
-#pragma pack()
+	ymchar	*	pSongName;
+	ymchar	*	pSongAuthor;
+	ymchar	*	pSongComment;
+	ymchar	*	pSongType;
+	ymchar	*	pSongPlayer;
+	yms32		musicTimeInSec;		// keep for compatibility
+	yms32		musicTimeInMs;
+} ymMusicInfo_t;
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+// Create object
+extern	YMMUSIC *		ymMusicCreate();
+extern  YMMUSIC *   ymMusicCreateWithRate(ymint rate);
+
+// Release object
+extern	void			ymMusicDestroy(YMMUSIC *pMusic);
+
+// Global settings
+extern	void			ymMusicSetLowpassFiler(YMMUSIC *pMus,ymbool bActive);
+
+// Functions
+extern	ymbool			ymMusicLoad(YMMUSIC *pMusic,const char *fName);						// Method 1 : Load file using stdio library (fopen/fread, etc..)
+extern	ymbool			ymMusicLoadMemory(YMMUSIC *pMusic,void *pBlock,ymu32 size);			// Method 2 : Load file from a memory block
+
+extern	ymbool			ymMusicCompute(YMMUSIC *pMusic,ymsample *pBuffer,ymint nbSample);	// Render nbSample samples of current YM tune into pBuffer PCM 16bits mono sample buffer.
+
+extern	void			ymMusicSetLoopMode(YMMUSIC *pMusic,ymbool bLoop);
+extern	const char	*	ymMusicGetLastError(YMMUSIC *pMusic);
+extern	int				ymMusicGetRegister(YMMUSIC *pMusic,ymint reg);
+extern	void			ymMusicGetInfo(YMMUSIC *pMusic,ymMusicInfo_t *pInfo);
+extern	void			ymMusicPlay(YMMUSIC *pMusic);
+extern	void			ymMusicPause(YMMUSIC *pMusic);
+extern	void			ymMusicStop(YMMUSIC *pMusic);
+extern	ymbool			ymMusicIsOver(YMMUSIC *_pMus);
+
+extern	void			ymMusicRestart(YMMUSIC *pMusic);
+
+extern	ymbool			ymMusicIsSeekable(YMMUSIC *pMusic);
+extern	ymu32			ymMusicGetPos(YMMUSIC *pMusic);
+extern	void			ymMusicSeek(YMMUSIC *pMusic,ymu32 timeInMs);
 
 #ifdef __cplusplus
 }
 #endif
 
+
 #endif
-
-

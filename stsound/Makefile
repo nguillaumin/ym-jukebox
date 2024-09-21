@@ -1,6 +1,6 @@
 RM = rm -f
 
-STSOUND_SRC=StSound-1.43/StSoundLibrary
+STSOUND_SRC=StSound/StSoundLibrary
 
 LIB = digidrum.o Ymload.o Ym2149Ex.o YmMusic.o YmUserInterface.o
 
