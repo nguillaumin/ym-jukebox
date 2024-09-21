@@ -144,7 +144,8 @@ unsigned char	*CYmMusic::depackFile(ymu32 checkOriginalSize)
 			return NULL;
 		}
 
-		pSrc = pBigMalloc + pHeader->size;
+		// pSrc = pBigMalloc + pHeader->size;
+		pSrc = pBigMalloc+sizeof(lzhHeader_t)+pHeader->name_lenght;
 		ymu32		packedSize = ReadLittleEndian32((ymu8*)&pHeader->packed);
 
 		pSrc += 2;		// skip CRC16
