@@ -15,4 +15,5 @@ yarn-error.log*
 *.sln
 
 data/songs.json
+data/authors.json
 *.wasm

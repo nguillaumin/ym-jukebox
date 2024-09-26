@@ -17,5 +17,8 @@ export default defineConfig({
     supported: {
       'top-level-await': true
     }
+  },
+  server: {
+    host: '0.0.0.0'
   }
 })

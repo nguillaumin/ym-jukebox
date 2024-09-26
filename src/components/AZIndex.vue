@@ -1,13 +1,7 @@
 <script setup>
-import { ref } from 'vue'
-const props = defineProps({
-  songs: Array,
-  default: []
-})
-
+const props = defineProps(['songs', 'letter'])
 const emit = defineEmits(['filter-list'])
 
-var letter = ref('A')
 const azIndex = {
   '0-9': 0
 }
@@ -26,7 +20,6 @@ props.songs.forEach((e) => {
 
 function onClickSelectLetter(l) {
   emit('filter-list', l)
-  letter.value = l
 }
 </script>
 
@@ -37,7 +30,7 @@ function onClickSelectLetter(l) {
         v-if="count"
         href="#"
         @click.prevent="onClickSelectLetter(l)"
-        :class="{ active: letter == l }"
+        :class="{ active: props.letter === l }"
         >{{ l }}</a
       ><span v-else>{{ l }}</span>
     </li>

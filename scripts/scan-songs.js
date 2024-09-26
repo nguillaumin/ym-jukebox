@@ -20,6 +20,7 @@ libymModule().then(function (libym) {
   }
 
   var songs = []
+  var authors = {}
   var dir = process.argv[2]
   walker = walk.walk(dir)
 
@@ -73,6 +74,11 @@ libymModule().then(function (libym) {
       }
 
       songs.push(song)
+      if (song.author in authors) {
+        authors[song.author]++
+      } else {
+        authors[song.author] = 1
+      }
 
       libym._free(infoPtr)
       libym._free(ptr)
@@ -92,6 +98,22 @@ libymModule().then(function (libym) {
     fs.writeFile(
       path.resolve(dir, 'songs.json'),
       JSON.stringify(songs, null, '  '),
+      function (err) {
+        if (err) {
+          throw err
+        }
+      }
+    )
+
+    var sortedAuthors = new Map(
+      Object.keys(authors)
+        .sort()
+        .map((author) => [author, authors[author]])
+    )
+
+    fs.writeFile(
+      path.resolve(dir, 'authors.json'),
+      JSON.stringify(Object.fromEntries(sortedAuthors), null, '  '),
       function (err) {
         if (err) {
           throw err

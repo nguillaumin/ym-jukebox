@@ -14,11 +14,26 @@
         font-family: sans-serif;
         text-align: center;
       }
+      .loading {
+        width: 100%;
+        height: 3rem;
+        position: absolute;
+        top:0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+
+        margin: auto;
+      }
+      .loading img {
+        vertical-align: middle;
+        margin-right: 1rem;
+      }
     </style>
   </head>
   <body>
     <main id="ym-player">
-      Loading...
+      <div class="loading"><img src="src/assets/bee.png">Loading...</div>
     </main>
     <script type="module" src="/src/main.js"></script>
   </body>

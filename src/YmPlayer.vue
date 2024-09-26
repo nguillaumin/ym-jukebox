@@ -6,16 +6,19 @@ import PlayControls from './components/PlayControls.vue'
 import AZIndex from './components/AZIndex.vue'
 
 import songListData from '../data/songs.json'
+import authorsData from '../data/authors.json'
 
 import libymWrapper from './libymWrapper'
 
 const songs = songListData
+const authors = authorsData
 const playlist = ref([])
 const activeTab = ref('songlist')
 const letter = ref('A')
 var playlistIndex = ref(0)
 var paused = ref(false)
 var playing = ref(false)
+var author = ref('')
 
 libymWrapper.setOnSongEnded(() => {
   onSongEnded()
@@ -24,8 +27,10 @@ libymWrapper.setOnSongEnded(() => {
 const filteredSongs = computed(() => {
   if (/[A-Z]/.test(letter.value)) {
     return songs.filter((song) => song.name.toUpperCase().startsWith(letter.value))
-  } else {
+  } else if (letter.value === '0-9') {
     return songs.filter((song) => !/^[A-Z]/.test(song.name.toUpperCase()))
+  } else {
+    return songs.filter((song) => song.author === author.value)
   }
 })
 
@@ -43,10 +48,20 @@ const hasNext = computed(() => {
 
 function onFilterSongList(l) {
   letter.value = l
+  author.value = '*'
 }
 
 function onAddToPlaylist(song) {
   playlist.value.push(song)
+}
+
+function onSelectAuthor(a) {
+  if (a === '*') {
+    letter.value = 'A'
+  } else {
+    letter.value = null
+    author.value = a
+  }
 }
 
 function onPlaySong(song) {
@@ -152,11 +167,28 @@ function playSong() {
       </ul>
     </nav>
 
-    <AZIndex v-show="activeTab === 'songlist'" :songs="songs" @filter-list="onFilterSongList" />
+    <AZIndex
+      v-show="activeTab === 'songlist'"
+      :songs="songs"
+      :letter="letter"
+      @filter-list="onFilterSongList"
+    />
+
+    <div v-if="activeTab === 'songlist'" class="authors">
+      <div>Author:&nbsp;</div>
+      <select @change="onSelectAuthor($event.target.options[$event.target.selectedIndex].value)">
+        <option value="*" :selected="author === '*'">-- All --</option>
+        <option v-for="(count, author) in authors" :key="author" :value="author">
+          {{ author }} ({{ count }})
+        </option>
+      </select>
+    </div>
 
     <SongList
       v-show="activeTab === 'songlist'"
       :songs="filteredSongs"
+      :authors="authors"
+      :author="author"
       :currentSong="song"
       @add-to-playlist="onAddToPlaylist"
       @play-song="onPlaySong"
@@ -265,6 +297,24 @@ nav ul li.active a {
 
 nav li {
   padding: 0.5rem 1rem;
+}
+
+.authors {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  text-wrap: nowrap;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+select {
+  width: 100%;
+  border: solid 1px #59af21;
+  background-color: #101f06;
+  color: #c8c8c8;
+  height: 2rem;
 }
 
 .about {
