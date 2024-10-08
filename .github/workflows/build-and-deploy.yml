@@ -38,6 +38,7 @@ jobs:
         path: stsound
     - run: npm ci
     - run: npm run lint
+    - run: npm run fetch-botb-songs
     - run: npm run scan-songs
     - run: npm run build
     - name: Upload build artifact

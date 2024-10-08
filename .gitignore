@@ -16,4 +16,6 @@ yarn-error.log*
 
 data/songs.json
 data/authors.json
+# BotB songs are downloaded via a NPM script
+data/battle-of-the-bits/
 *.wasm

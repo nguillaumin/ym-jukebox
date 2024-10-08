@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "format": "prettier --write src/ scripts/",
-    "scan-songs": "node scripts/scan-songs.js data"
+    "scan-songs": "node scripts/scan-songs.js data",
+    "fetch-botb-songs": "node scripts/fetch-botb-songs.js data/battle-of-the-bits"
   },
   "dependencies": {
     "vue": "^3.4.29"
