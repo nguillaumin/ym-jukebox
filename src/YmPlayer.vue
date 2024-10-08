@@ -107,10 +107,13 @@ function onPause() {
 }
 
 function onPlay() {
-  playing.value = true
   if (paused.value) {
+    playing.value = true
     paused.value = false
     libymWrapper.unpause()
+  } else if (!playing.value) {
+    // Case when no song was started yet (first play)
+    playSong()
   }
 }
 

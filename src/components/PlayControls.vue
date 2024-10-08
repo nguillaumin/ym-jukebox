@@ -23,7 +23,7 @@ const emit = defineEmits(['next', 'previous', 'play', 'pause'])
 function onClickPlayPause() {
   if (props.playing === true) {
     emit('pause')
-  } else {
+  } else if (props.song) {
     emit('play')
   }
 }
